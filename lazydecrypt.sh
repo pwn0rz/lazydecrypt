@@ -2,6 +2,7 @@
 
 
 APP_PATH=/var/containers/Bundle/Application
+
 function list_app()
 {
     for bid_path in ${APP_PATH}/*;
@@ -27,15 +28,15 @@ function decrypt_app()
         plistutil -i "$manifest" -f xml | grep "<string.*.sinf</string>$" | cut -d'>' -f2 | cut -d '<' -f1 | sort | uniq | while read -r sinf;
         do
             #echo "processing $sinf"
-	    macho=$(basename "$sinf" | sed -E s/.sinf//g)
-	    rpath=$(dirname $(dirname "$sinf"))
-	    echo "decrypting file @$rpath/$macho"
-
-	    src="$path/$rpath/$macho"
-	    dst="dump/$app/$rpath/$macho"
-
-	    flexdecrypt file "$src" --output "$dst"
-	done
+            macho=$(basename "$sinf" | sed -E s/.sinf//g)
+            rpath=$(dirname $(dirname "$sinf"))
+            echo "decrypting file @$rpath/$macho"
+            
+            src="$path/$rpath/$macho"
+            dst="dump/$app/$rpath/$macho"
+            
+            flexdecrypt file "$src" --output "$dst"
+        done
     fi
     
 }
